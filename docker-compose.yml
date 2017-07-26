@@ -2,10 +2,12 @@ version: "2"
 services:
 
   postgres:
-    image: postgres:9.2
+    image: postgres:9.6-alpine
     container_name: postgres
     environment:
-      - POSTGRES_PASSWORD=TCrGaanoC2s7gT
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./conf/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
   zookeeper:
     container_name: zookeeper
@@ -15,52 +17,79 @@ services:
       - ZOO_SERVERS=zookeeper
 
   overlord:
-    image: znly/druid:0.9.1.1
-    environment:
-      - DRUID_XMX=1g 
-      - DRUID_XMS=1g 
-      - DRUID_MAXNEWSIZE=250m 
-      - DRUID_NEWSIZE=250m
+    container_name: overlord
+    image: rusnyder/druid:latest
+    ports:
+      - 8090:8090
     command:
       - overlord
 
   coordinator:
-    image: znly/druid:0.9.1.1
-    environment:
-      - DRUID_XMX=1g 
-      - DRUID_XMS=1g 
-      - DRUID_MAXNEWSIZE=250m 
-      - DRUID_NEWSIZE=250m
+    container_name: coordinator
+    image: rusnyder/druid:latest
+    ports:
+      - 8081:8081
     command:
       - coordinator
 
-
   middlemanager:
-    image: znly/druid:0.9.1.1
-    environment:
-      - DRUID_XMX=1g 
-      - DRUID_XMS=1g 
-      - DRUID_MAXNEWSIZE=250m 
-      - DRUID_NEWSIZE=250m
+    container_name: middlemanager
+    image: rusnyder/druid:latest
+    ports:
+      - 8091:8091
     command:
       - middleManager
 
   historical:
-    image: znly/druid:0.9.1.1
-    environment:
-      - DRUID_XMX=1g 
-      - DRUID_XMS=1g 
-      - DRUID_MAXNEWSIZE=250m 
-      - DRUID_NEWSIZE=250m
+    container_name: historical
+    image: rusnyder/druid:latest
+    ports:
+      - 8093:8093
     command:
       - historical
 
   broker:
-    image: znly/druid:0.9.1.1
-    environment:
-      - DRUID_XMX=1g 
-      - DRUID_XMS=1g 
-      - DRUID_MAXNEWSIZE=250m 
-      - DRUID_NEWSIZE=250m
+    container_name: broker
+    image: rusnyder/druid:latest
+    ports:
+      - 8082:8082
     command:
       - broker
+
+  tranquility:
+    container_name: tranquility
+    image: rusnyder/tranquility:latest
+    ports:
+      - 8200:8200
+
+  superset:
+    container_name: superset
+    image: amancevice/superset
+    ports:
+      - 8088:8088
+    volumes:
+      - ./.superset:/home/superset/.superset
+
+  swiv:
+    container_name: swiv
+    image: rusnyder/swiv:latest
+    ports:
+      - 9090:9090
+    environment:
+      DRUID_BROKER: broker:8082
+
+  metabase:
+    container_name: metabase
+    image: metabase/metabase
+    ports:
+      - 3000:3000
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: metabase
+      MB_DB_PASS: metabase
+      MB_DB_HOST: postgres
+    volumes:
+      - ./.metabase-data:/metabase-data
+

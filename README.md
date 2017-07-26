@@ -3,7 +3,7 @@ Docker Druid
 
 Tags:
 
-- 0.9.1.1, 0.9, latest ([Dockerfile](https://github.com/znly/docker-druid/blob/master/Dockerfile))
+- latest ([Dockerfile](https://github.com/rusnyder/docker-druid/blob/master/Dockerfile))
 
 What is Druid?
 ==================
@@ -14,12 +14,12 @@ Druid is an open-source analytics data store designed for business intelligence 
 How to use?
 ===========
 
-Druid being a complex system, the best way to get up and running with a cluster is to use the docker-compose file provided. 
+Druid being a complex system, the best way to get up and running with a cluster is to use the docker-compose file provided.
 
 Clone our public repository:
 
 ```
-git clone git@github.com:znly/docker-druid.git
+git clone git@github.com:rusnyder/docker-druid.git
 ```
 
 and run :
@@ -39,6 +39,12 @@ and the following druid services :
 - 1 overlord
 - 1 middlemanager
 - 1 historical
+
+as well as the following UIs :
+
+- Swiv
+- Metabase
+- Superset
 
 The image contains the full druid distribution and use the default druid cli. If no command is provided the image will run as a broker.
 
@@ -67,3 +73,4 @@ Authors
 
 - Jean-Baptiste DALIDO <jb@zen.ly>
 - Clément REY <clement@zen.ly>
+- Russell Snyder <ru.snyder@gmail.com>

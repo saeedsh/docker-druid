@@ -1,3 +1,5 @@
 .*.sw*
 .*.un*
 Makefile
+__pycache__
+*.db
