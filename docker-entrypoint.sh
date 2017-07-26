@@ -42,7 +42,7 @@ if [ "$DRUID_USE_CONTAINER_IP" != "-" ]; then
 fi
 
 if [ "$DRUID_ZK_HOST" != "-" ]; then
-    sed -ri 's/druid.zk.service.host=.*/druid.zk.service.host='${DRUID_ZK_HOST}'/g' ${DRUID_HOME}/conf/druid/$1/runtime.properties
+    sed -ri 's/druid.zk.service.host=.*/druid.zk.service.host='${DRUID_ZK_HOST}'/g' ${DRUID_HOME}/conf/druid/_common/common.runtime.properties
 fi
 
 java `cat ${DRUID_HOME}/conf/druid/$1/jvm.config | xargs` -cp ${DRUID_HOME}/conf/druid/_common:${DRUID_HOME}/conf/druid/$1:${DRUID_HOME}/lib/* io.druid.cli.Main server $@
