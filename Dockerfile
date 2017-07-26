@@ -10,7 +10,9 @@ ENV DRUID_XMS           '-'
 ENV DRUID_NEWSIZE       '-'
 ENV DRUID_MAXNEWSIZE    '-'
 ENV DRUID_HOSTNAME      '-'
+ENV DRUID_PORT          '-'
 ENV DRUID_LOGLEVEL      '-'
+ENV DRUID_ZK_HOST       '-'
 
 RUN wget -q -O - \
     http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /usr/share \

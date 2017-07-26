@@ -28,6 +28,10 @@ if [ "$DRUID_HOSTNAME" != "-" ]; then
     sed -ri 's/druid.host=.*/druid.host='${DRUID_HOSTNAME}'/g' ${DRUID_HOME}/conf/druid/$1/runtime.properties
 fi
 
+if [ "$DRUID_PORT" != "-" ]; then
+    sed -ri 's/druid.port=.*/druid.port='${DRUID_PORT}'/g' ${DRUID_HOME}/conf/druid/$1/runtime.properties
+fi
+
 if [ "$DRUID_LOGLEVEL" != "-" ]; then
     sed -ri 's/druid.emitter.logging.logLevel=.*/druid.emitter.logging.logLevel='${DRUID_LOGLEVEL}'/g' ${DRUID_HOME}/conf/druid/_common/common.runtime.properties
 fi
@@ -35,6 +39,10 @@ fi
 if [ "$DRUID_USE_CONTAINER_IP" != "-" ]; then
     ipaddress=`ip a|grep "global eth0"|awk '{print $2}'|awk -F '\/' '{print $1}'`
     sed -ri 's/druid.host=.*/druid.host='${ipaddress}'/g' ${DRUID_HOME}/conf/druid/$1/runtime.properties
+fi
+
+if [ "$DRUID_ZK_HOST" != "-" ]; then
+    sed -ri 's/druid.zk.service.host=.*/druid.zk.service.host='${DRUID_ZK_HOST}'/g' ${DRUID_HOME}/conf/druid/$1/runtime.properties
 fi
 
 java `cat ${DRUID_HOME}/conf/druid/$1/jvm.config | xargs` -cp ${DRUID_HOME}/conf/druid/_common:${DRUID_HOME}/conf/druid/$1:${DRUID_HOME}/lib/* io.druid.cli.Main server $@

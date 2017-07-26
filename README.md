@@ -67,6 +67,8 @@ Available environment options:
 - `DRUID_NEWSIZE` '-'
 - `DRUID_MAXNEWSIZE` '-'
 - `DRUID_HOSTNAME` '-'
+- `DRUID_PORT` '-'
+- `DRUID_ZK_HOST` '-'
 
 Authors
 =======
