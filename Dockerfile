@@ -15,9 +15,10 @@ ENV DRUID_LOGLEVEL      '-'
 ENV DRUID_ZK_HOST       '-'
 
 RUN wget -q -O - \
-    http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /usr/share \
-    && ln -s /usr/share/druid-$DRUID_VERSION /usr/share/druid \
-    && mkdir -p /tmp/druid
+    http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz \
+    | tar -xzf - -C /usr/share \
+ && ln -s /usr/share/druid-$DRUID_VERSION /usr/share/druid \
+ && mkdir -p /tmp/druid
 
 COPY conf /usr/share/druid-$DRUID_VERSION/conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh

@@ -1,9 +1,14 @@
 Docker Druid
 ================
 
+[![Docker Build Status](https://img.shields.io/docker/build/rusnyder/druid.svg)][dockerhub]
+[![Docker Image Stats](https://images.microbadger.com/badges/image/rusnyder/druid.svg)](https://microbadger.com/images/rusnyder/druid)
+[![Docker Pulls](https://img.shields.io/docker/pulls/rusnyder/druid.svg)][dockerhub]
 Tags:
 
 - latest ([Dockerfile](https://github.com/rusnyder/docker-druid/blob/master/Dockerfile))
+
+[dockerhub]: https://hub.docker.com/r/rusnyder/druid
 
 What is Druid?
 ==================
