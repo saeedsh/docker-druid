@@ -19,13 +19,12 @@ script:
 after_success:
   # Push master builds to Docker Hub
   - if [[ -n "$TRAVIS_TAG" ]] && [[ "$TRAVIS_TAG" =~ ^release/.*$ ]]; then
-      DOCKER_TAG=$(echo "$TRAVIS_TAG" | sed -e 's:release/::');
+    DOCKER_TAG=$(echo "$TRAVIS_TAG" | sed -e 's:release/::');
     elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
-      DOCKER_TAG=latest;
+    DOCKER_TAG=latest;
     fi;
     if [[ -n "$DOCKER_TAG" ]]; then
-      echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin;
-      docker push rusnyder/druid:$DOCKER_TAG;
-      # Trigger image analysis
-      curl -XPOST "https://hooks.microbadger.com/images/rusnyder/druid/92E6HVksxr9Nx2MKCj2qo0DkUYo=";
+    echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin;
+    docker push rusnyder/druid:$DOCKER_TAG;
+    curl -XPOST "https://hooks.microbadger.com/images/rusnyder/druid/92E6HVksxr9Nx2MKCj2qo0DkUYo=";
     fi;
