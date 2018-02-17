@@ -6,15 +6,21 @@ language: bash
 services:
   - docker
 
+# Build the image, then spin up a druid stack for testing the image
 before_install:
   - docker build -t rusnyder/druid .
   - docker-compose -f docker-compose.test.yml up -d
 
+# If the stack comes up, we can run the 'sut' (system under test) which
+# will check that the broker is up and functional
 script:
   - docker-compose -f docker-compose.test.yml run sut 2>/dev/null | grep io.druid
 
 after_success:
+  # Push master builds to Docker Hub
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin;
     docker push rusnyder/druid;
     fi
+  # Trigger image analysis
+  - curl -XPOST "https://hooks.microbadger.com/images/rusnyder/druid/92E6HVksxr9Nx2MKCj2qo0DkUYo="
