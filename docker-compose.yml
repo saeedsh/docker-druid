@@ -59,6 +59,11 @@ services:
   tranquility:
     container_name: tranquility
     image: rusnyder/tranquility:latest
+    volumes:
+      - ./conf/tranquility:/etc/tranquility
+    environment:
+      TRANQUILITY_CONFIG_FILE: /etc/tranquility/config.json
+      #      TRANQUILITY_PROPERTIES_ZOOKEEPER_CONNECT: zookeeper:2181
     ports:
       - 8200:8200
 
