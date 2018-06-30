@@ -1,0 +1,64 @@
+{
+  "dataSources" : {
+    "SOLENLOG-ACID-V4" : {
+      "spec" : {
+        "dataSchema" : {
+          "dataSource" : "SOLENLOG-ACID-V4",
+          "parser" : {
+            "type" : "string",
+            "parseSpec" : {
+              "timestampSpec" : {
+                "column" : "TIME",
+                "format" : "auto"
+              },
+              "dimensionsSpec" : {
+                "dimensions" : ["SOURCE","SENSOR_NAME","SENSOR_TYPE", "SENSOR_INFO","TAG_ANTENNA","TAG_EPC"],
+                "dimensionExclusions" : [
+                  "TIME"
+                ]
+              },
+              "format" : "json"
+            }
+          },
+          "granularitySpec" : {
+            "type" : "uniform",
+            "segmentGranularity" : "hour",
+            "queryGranularity" : "none"
+          },
+          "metricsSpec" : [
+            {
+              "type" : "count",
+              "name" : "count"
+            }
+          ]
+        },
+        "ioConfig" : {
+          "type" : "realtime"
+        },
+        "tuningConfig" : {
+          "type" : "realtime",
+          "maxRowsInMemory" : "100000",
+          "intermediatePersistPeriod" : "PT10M",
+          "windowPeriod" : "PT10M"
+        }
+      },
+      "properties" : {
+        "task.partitions" : "1",
+        "task.replicants" : "1",
+        "topicPattern.priority" : "1",
+        "topicPattern" : "SOLENLOG-ACID-V4"
+      }
+    }
+  },
+  "properties" : {
+    "zookeeper.connect" : "zookeeper",
+    "druid.discovery.curator.path" : "/druid/discovery",
+    "druid.selectors.indexing.serviceName" : "druid/overlord",
+    "http.port" : "8200",
+    "http.threads" : "9" ,
+    "kafka.zookeeper.connect" : "192.168.200.171:2080",
+    "kafka.group.id" : "tranquility-kafka",
+    "commit.periodMillis" : "15000",
+    "reportDropsAsExceptions" : "false"
+  }
+}

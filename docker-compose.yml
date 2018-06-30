@@ -57,16 +57,17 @@ services:
       - broker
 
   tranquility:
-    build: ./tranquility
     container_name: tranquility
-    image: tranquility
+    image: sdshariati/tranquility:latest
     volumes:
-      - ./tranquility/conf/config.json:/etc/tranquility/config.json
+      - ./conf/tranquility:/etc/tranquility
     environment:
       TRANQUILITY_CONFIG_FILE: /etc/tranquility/config.json
       TRANQUILITY_PROPERTIES_ZOOKEEPER_CONNECT: zookeeper:2181
     ports:
       - 8200:8200
+    extra_hosts:
+      - "kafka1:192.168.200.171"
 
   superset:
     container_name: superset
