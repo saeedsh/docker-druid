@@ -11,7 +11,7 @@ services:
 
   zookeeper:
     container_name: zookeeper
-    image: znly/zookeeper:3.4.8
+    image: zookeeper
     environment:
       - ZOO_ID=1
       - ZOO_SERVERS=zookeeper
@@ -57,13 +57,14 @@ services:
       - broker
 
   tranquility:
+    build: ./tranquility
     container_name: tranquility
-    image: rusnyder/tranquility:latest
+    image: tranquility
     volumes:
-      - ./conf/tranquility:/etc/tranquility
+      - ./tranquility/conf/config.json:/etc/tranquility/config.json
     environment:
       TRANQUILITY_CONFIG_FILE: /etc/tranquility/config.json
-      #      TRANQUILITY_PROPERTIES_ZOOKEEPER_CONNECT: zookeeper:2181
+      TRANQUILITY_PROPERTIES_ZOOKEEPER_CONNECT: zookeeper:2181
     ports:
       - 8200:8200
 
@@ -75,26 +76,26 @@ services:
     volumes:
       - ./.superset:/home/superset/.superset
 
-  swiv:
-    container_name: swiv
-    image: rusnyder/swiv:latest
-    ports:
-      - 9090:9090
-    environment:
-      DRUID_BROKER: broker:8082
+#  swiv:
+#    container_name: swiv
+#    image: rusnyder/swiv:latest
+#    ports:
+#      - 9090:9090
+#    environment:
+#      DRUID_BROKER: broker:8082
 
-  metabase:
-    container_name: metabase
-    image: metabase/metabase
-    ports:
-      - 3000:3000
-    environment:
-      MB_DB_TYPE: postgres
-      MB_DB_DBNAME: metabase
-      MB_DB_PORT: 5432
-      MB_DB_USER: metabase
-      MB_DB_PASS: metabase
-      MB_DB_HOST: postgres
-    volumes:
-      - ./.metabase-data:/metabase-data
+#  metabase:
+#    container_name: metabase
+#    image: metabase/metabase
+#    ports:
+#      - 3000:3000
+#    environment:
+#      MB_DB_TYPE: postgres
+#      MB_DB_DBNAME: metabase
+#      MB_DB_PORT: 5432
+#      MB_DB_USER: metabase
+#      MB_DB_PASS: metabase
+#      MB_DB_HOST: postgres
+#    volumes:
+#      - ./.metabase-data:/metabase-data
 
