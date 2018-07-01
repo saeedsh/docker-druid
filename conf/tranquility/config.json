@@ -1,64 +1,85 @@
 {
-  "dataSources" : {
-    "SOLENLOG-ACID-V4" : {
-      "spec" : {
-        "dataSchema" : {
-          "dataSource" : "SOLENLOG-ACID-V4",
-          "parser" : {
-            "type" : "string",
-            "parseSpec" : {
-              "timestampSpec" : {
-                "column" : "TIME",
-                "format" : "auto"
-              },
-              "dimensionsSpec" : {
-                "dimensions" : ["SOURCE","SENSOR_NAME","SENSOR_TYPE", "SENSOR_INFO","TAG_ANTENNA","TAG_EPC"],
-                "dimensionExclusions" : [
-                  "TIME"
-                ]
-              },
-              "format" : "json"
+    "dataSources": [
+        {
+            "spec": {
+                "dataSchema": {
+                    "dataSource": "SOLENLOG-ACID-V4",
+                    "parser": {
+                        "type": "avro_stream",
+                        "avroBytesDecoder": {
+                            "type": "schema_repo",
+                            "subjectAndIdConverter": {
+                                "type": "avro_1124",
+                                "topic": "SOLENLOG-ACID-V4-value"
+                            }
+                        },
+                        "schemaRepository": {
+                            "type": "avro_1124_rest_client",
+                            "url": "http://service.solentech.com.br:8081"
+                        },
+                        "parseSpec": {
+                            "format": "json",
+                            "flattenSpec": {
+                                "useFieldDiscovery": false,
+                                "fields": [
+                                    {
+                                        "type": "path",
+                                        "name": "SOURCE",
+                                        "expr": "$.SOURCE"
+                                    },
+                                    {
+                                        "type": "path",
+                                        "name": "TIME",
+                                        "expr": "$.body.TIME"
+                                    }
+                                ]
+                            },
+                            "timestampSpec": {
+                                "column": "TIME",
+                                "format": "auto"
+                            },
+                            "dimensionsSpec": {
+                                "dimensions": [],
+                                "dimensionsExclusions": [
+                                    "ignore_me"
+                                ]
+                            }
+                        }
+                    },
+                    "metricsSpec": [
+                        {
+                            "type": "count",
+                            "name": "SOURCE"
+                        }
+                    ],
+                    "granularitySpec": {
+                        "type": "uniform",
+                        "segmentGranularity": "hour",
+                        "queryGranularity": "none"
+                    }
+                },
+                "tuningConfig": {
+                    "type": "realtime",
+                    "maxRowsInMemory": 100000,
+                    "intermediatePersistPeriod": "PT200M",
+                    "windowPeriod": "PT200M"
+                }
+            },
+            "properties": {
+                "topicPattern": "SOLENLOG-ACID-V4",
+                "topicPattern.priority": 1
             }
-          },
-          "granularitySpec" : {
-            "type" : "uniform",
-            "segmentGranularity" : "hour",
-            "queryGranularity" : "none"
-          },
-          "metricsSpec" : [
-            {
-              "type" : "count",
-              "name" : "count"
-            }
-          ]
-        },
-        "ioConfig" : {
-          "type" : "realtime"
-        },
-        "tuningConfig" : {
-          "type" : "realtime",
-          "maxRowsInMemory" : "100000",
-          "intermediatePersistPeriod" : "PT10M",
-          "windowPeriod" : "PT10M"
         }
-      },
-      "properties" : {
-        "task.partitions" : "1",
-        "task.replicants" : "1",
-        "topicPattern.priority" : "1",
-        "topicPattern" : "SOLENLOG-ACID-V4"
-      }
+    ],
+    "properties": {
+        "zookeeper.connect" : "zookeeper",
+        "druid.discovery.curator.path" : "/druid/discovery",
+        "druid.selectors.indexing.serviceName" : "druid/overlord",
+        "http.port" : "8200",
+        "http.threads" : "9" ,
+        "kafka.zookeeper.connect" : "192.168.200.171:2080",
+        "kafka.group.id" : "tranquility-kafka",
+        "commit.periodMillis" : 15000,
+        "reportDropsAsExceptions" : "false"
     }
-  },
-  "properties" : {
-    "zookeeper.connect" : "zookeeper",
-    "druid.discovery.curator.path" : "/druid/discovery",
-    "druid.selectors.indexing.serviceName" : "druid/overlord",
-    "http.port" : "8200",
-    "http.threads" : "9" ,
-    "kafka.zookeeper.connect" : "192.168.200.171:2080",
-    "kafka.group.id" : "tranquility-kafka",
-    "commit.periodMillis" : "15000",
-    "reportDropsAsExceptions" : "false"
-  }
 }
